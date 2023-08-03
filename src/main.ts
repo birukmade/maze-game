@@ -8,14 +8,15 @@ import Matter, {
   Events,
 } from "matter-js";
 
-const HEIGHT = 600;
-const WIDTH = 600;
+const HEIGHT = window.innerHeight;
+const WIDTH = window.innerWidth;
 const BORDER_WALL_THICKNESS = 20;
 const MAZE_WALL_THICKNESS = 5;
-const CELLS = 3;
+const HORIZONTAL_CELLS = 20;
+const VERTICAL_CELLS = 10;
 //total space for drawing cells = total width - space taken by bordewr walls on each side
-const CELL_WIDTH = (WIDTH - BORDER_WALL_THICKNESS * 2) / CELLS;
-const CELL_HEIGHT = (HEIGHT - BORDER_WALL_THICKNESS * 2) / CELLS;
+const CELL_WIDTH = (WIDTH - BORDER_WALL_THICKNESS * 2) / HORIZONTAL_CELLS;
+const CELL_HEIGHT = (HEIGHT - BORDER_WALL_THICKNESS * 2) / VERTICAL_CELLS;
 
 const engine = Engine.create();
 engine.gravity.y = 0;
@@ -72,21 +73,21 @@ const walls: Matter.Body[] = [
 World.add(world, walls);
 
 //Maze generation
-const grid: boolean[][] = Array(CELLS)
+const grid: boolean[][] = Array(VERTICAL_CELLS)
   .fill(null)
-  .map(() => Array(3).fill(false));
+  .map(() => Array(HORIZONTAL_CELLS).fill(false));
 
-const horizontals: boolean[][] = Array(CELLS - 1)
+const horizontals: boolean[][] = Array(VERTICAL_CELLS - 1)
   .fill(null)
-  .map(() => Array(CELLS).fill(false));
+  .map(() => Array(HORIZONTAL_CELLS).fill(false));
 
-const verticals: boolean[][] = Array(CELLS - 1)
+const verticals: boolean[][] = Array(HORIZONTAL_CELLS - 1)
   .fill(null)
-  .map(() => Array(CELLS).fill(false));
+  .map(() => Array(VERTICAL_CELLS).fill(false));
 
 //select a random cell from the grid
-const row: number = Math.floor(Math.random() * CELLS);
-const col: number = Math.floor(Math.random() * CELLS);
+const row: number = Math.floor(Math.random() * VERTICAL_CELLS);
+const col: number = Math.floor(Math.random() * HORIZONTAL_CELLS);
 
 const shuffle = <T>(arr: T[][]): T[][] => {
   let pointer = arr.length;
@@ -127,9 +128,9 @@ const stepThroughCell = (row: number, col: number) => {
       //filter out of bound neighbors
       if (
         (nextRow as number) < 0 ||
-        (nextRow as number) >= CELLS ||
+        (nextRow as number) >= VERTICAL_CELLS ||
         (nextColumn as number) < 0 ||
-        (nextColumn as number) >= CELLS
+        (nextColumn as number) >= HORIZONTAL_CELLS
       ) {
         continue;
       }
