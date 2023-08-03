@@ -2,8 +2,12 @@ import { World, Engine, Runner, Render, Bodies } from "matter-js";
 
 const HEIGHT = 600;
 const WIDTH = 600;
-const WALL_THICKNESS = 20;
+const BORDER_WALL_THICKNESS = 20;
+const MAZE_WALL_THICKNESS = 5;
 const CELLS = 3;
+//total space for drawing cells = total width - space taken by bordewr walls on each side
+const CELL_WIDTH = (WIDTH - BORDER_WALL_THICKNESS * 2) / CELLS;
+const CELL_HEIGHT = (HEIGHT - BORDER_WALL_THICKNESS * 2) / CELLS;
 
 const engine = Engine.create();
 const { world } = engine;
@@ -22,24 +26,36 @@ Runner.run(Runner.create(), engine);
 
 //border walls
 const walls: Matter.Body[] = [
-  Bodies.rectangle(WALL_THICKNESS / 2, HEIGHT / 2, WALL_THICKNESS, HEIGHT, {
-    isStatic: true,
-  }),
   Bodies.rectangle(
-    WIDTH - WALL_THICKNESS / 2,
+    BORDER_WALL_THICKNESS / 2,
     HEIGHT / 2,
-    WALL_THICKNESS,
+    BORDER_WALL_THICKNESS,
+    HEIGHT,
+    {
+      isStatic: true,
+    }
+  ),
+  Bodies.rectangle(
+    WIDTH - BORDER_WALL_THICKNESS / 2,
+    HEIGHT / 2,
+    BORDER_WALL_THICKNESS,
     HEIGHT,
     { isStatic: true }
   ),
-  Bodies.rectangle(WIDTH / 2, WALL_THICKNESS / 2, WIDTH, WALL_THICKNESS, {
-    isStatic: true,
-  }),
   Bodies.rectangle(
     WIDTH / 2,
-    HEIGHT - WALL_THICKNESS / 2,
+    BORDER_WALL_THICKNESS / 2,
     WIDTH,
-    WALL_THICKNESS,
+    BORDER_WALL_THICKNESS,
+    {
+      isStatic: true,
+    }
+  ),
+  Bodies.rectangle(
+    WIDTH / 2,
+    HEIGHT - BORDER_WALL_THICKNESS / 2,
+    WIDTH,
+    BORDER_WALL_THICKNESS,
     { isStatic: true }
   ),
 ];
@@ -129,3 +145,49 @@ const stepThroughCell = (row: number, col: number) => {
     }
   }
 };
+
+const drawHorizontalLines = (horizontalLines: boolean[][]): void => {
+  horizontalLines.forEach((row, rowIndex) => {
+    row.forEach((isOpen, colIndex) => {
+      console.log(isOpen);
+      if (!isOpen) {
+        const wall = Bodies.rectangle(
+          BORDER_WALL_THICKNESS + colIndex * CELL_WIDTH + CELL_WIDTH / 2,
+          BORDER_WALL_THICKNESS + rowIndex * CELL_HEIGHT + CELL_HEIGHT,
+          CELL_WIDTH,
+          MAZE_WALL_THICKNESS,
+          {
+            isStatic: true,
+          }
+        );
+
+        World.add(world, wall);
+      }
+    });
+  });
+};
+
+const drowVerticalLines = (verticalLines: boolean[][]): void => {
+  verticalLines.forEach((row, rowIndex) => {
+    row.forEach((isOpen, colIndex) => {
+      if (!isOpen) {
+        const wall = Bodies.rectangle(
+          BORDER_WALL_THICKNESS + rowIndex * CELL_WIDTH + CELL_WIDTH,
+          BORDER_WALL_THICKNESS + colIndex * CELL_HEIGHT + CELL_HEIGHT / 2,
+          MAZE_WALL_THICKNESS,
+          CELL_HEIGHT,
+          {
+            isStatic: true,
+          }
+        );
+
+        World.add(world, wall);
+      }
+    });
+  });
+};
+
+stepThroughCell(row, col);
+//draw a wall for each vertical and horizontal walls
+drawHorizontalLines(horizontals);
+drowVerticalLines(verticals);
