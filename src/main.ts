@@ -1,4 +1,4 @@
-import { World, Engine, Runner, Render, Bodies } from "matter-js";
+import Matter, { World, Engine, Runner, Render, Bodies, Body } from "matter-js";
 
 const HEIGHT = 600;
 const WIDTH = 600;
@@ -149,7 +149,6 @@ const stepThroughCell = (row: number, col: number) => {
 const drawHorizontalLines = (horizontalLines: boolean[][]): void => {
   horizontalLines.forEach((row, rowIndex) => {
     row.forEach((isOpen, colIndex) => {
-      console.log(isOpen);
       if (!isOpen) {
         const wall = Bodies.rectangle(
           BORDER_WALL_THICKNESS + colIndex * CELL_WIDTH + CELL_WIDTH / 2,
@@ -209,17 +208,15 @@ const drawPlayerObject = (
   borderWallThickness: number,
   cellWidth: number,
   cellHeight: number
-) => {
+): Matter.Body => {
   const playerObject = Bodies.circle(
     borderWallThickness + cellHeight / 2,
     borderWallThickness + cellHeight / 2,
-    cellWidth > cellHeight ? cellHeight / 4 : cellWidth / 4,
-    {
-      isStatic: true,
-    }
+    cellWidth > cellHeight ? cellHeight / 4 : cellWidth / 4
   );
 
   World.add(world, playerObject);
+  return playerObject;
 };
 
 stepThroughCell(row, col);
@@ -231,4 +228,25 @@ drowVerticalLines(verticals);
 drawGoalObject(WIDTH, HEIGHT, BORDER_WALL_THICKNESS, CELL_WIDTH, CELL_HEIGHT);
 
 //draw player controlled object
-drawPlayerObject(BORDER_WALL_THICKNESS, CELL_WIDTH, CELL_HEIGHT);
+const playerObject = drawPlayerObject(
+  BORDER_WALL_THICKNESS,
+  CELL_WIDTH,
+  CELL_HEIGHT
+);
+
+//add keybord event listners
+document.addEventListener("keydown", (event) => {
+  const { x, y } = playerObject.velocity;
+  if (event.code === "KeyW") {
+    Body.setVelocity(playerObject, { x, y: y - 5 });
+  }
+  if (event.code === "KeyA") {
+    Body.setVelocity(playerObject, { x: x - 5, y });
+  }
+  if (event.code === "KeyS") {
+    Body.setVelocity(playerObject, { x, y: y + 5 });
+  }
+  if (event.code === "KeyD") {
+    Body.setVelocity(playerObject, { x: x + 5, y });
+  }
+});
