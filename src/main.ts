@@ -205,6 +205,23 @@ const drawGoalObject = (
   World.add(world, goal);
 };
 
+const drawPlayerObject = (
+  borderWallThickness: number,
+  cellWidth: number,
+  cellHeight: number
+) => {
+  const playerObject = Bodies.circle(
+    borderWallThickness + cellHeight / 2,
+    borderWallThickness + cellHeight / 2,
+    cellWidth > cellHeight ? cellHeight / 4 : cellWidth / 4,
+    {
+      isStatic: true,
+    }
+  );
+
+  World.add(world, playerObject);
+};
+
 stepThroughCell(row, col);
 //draw a wall for each vertical and horizontal walls
 drawHorizontalLines(horizontals);
@@ -212,3 +229,6 @@ drowVerticalLines(verticals);
 
 //draw goal object
 drawGoalObject(WIDTH, HEIGHT, BORDER_WALL_THICKNESS, CELL_WIDTH, CELL_HEIGHT);
+
+//draw player controlled object
+drawPlayerObject(BORDER_WALL_THICKNESS, CELL_WIDTH, CELL_HEIGHT);
