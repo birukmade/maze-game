@@ -1,10 +1,18 @@
-import Matter, { World, Engine, Runner, Render, Bodies, Body } from "matter-js";
+import Matter, {
+  World,
+  Engine,
+  Runner,
+  Render,
+  Bodies,
+  Body,
+  Events,
+} from "matter-js";
 
 const HEIGHT = 600;
 const WIDTH = 600;
 const BORDER_WALL_THICKNESS = 20;
 const MAZE_WALL_THICKNESS = 5;
-const CELLS = 15;
+const CELLS = 3;
 //total space for drawing cells = total width - space taken by bordewr walls on each side
 const CELL_WIDTH = (WIDTH - BORDER_WALL_THICKNESS * 2) / CELLS;
 const CELL_HEIGHT = (HEIGHT - BORDER_WALL_THICKNESS * 2) / CELLS;
@@ -157,6 +165,7 @@ const drawHorizontalLines = (horizontalLines: boolean[][]): void => {
           CELL_WIDTH,
           MAZE_WALL_THICKNESS,
           {
+            label: "maze wall",
             isStatic: true,
           }
         );
@@ -177,6 +186,7 @@ const drowVerticalLines = (verticalLines: boolean[][]): void => {
           MAZE_WALL_THICKNESS,
           CELL_HEIGHT,
           {
+            label: "maze wall",
             isStatic: true,
           }
         );
@@ -199,7 +209,7 @@ const drawGoalObject = (
     height - borderWallThickness - cellHeight / 2,
     cellWidth * 0.6,
     cellHeight * 0.6,
-    { isStatic: true }
+    { isStatic: true, label: "goal object" }
   );
 
   World.add(world, goal);
@@ -213,7 +223,10 @@ const drawPlayerObject = (
   const playerObject = Bodies.circle(
     borderWallThickness + cellHeight / 2,
     borderWallThickness + cellHeight / 2,
-    cellWidth > cellHeight ? cellHeight / 4 : cellWidth / 4
+    cellWidth > cellHeight ? cellHeight / 4 : cellWidth / 4,
+    {
+      label: "player object",
+    }
   );
 
   World.add(world, playerObject);
@@ -250,4 +263,20 @@ document.addEventListener("keydown", (event) => {
   if (event.code === "KeyD") {
     Body.setVelocity(playerObject, { x: x + 5, y });
   }
+});
+
+//detect a win
+Events.on(engine, "collisionStart", (event) => {
+  event.pairs.forEach((collision) => {
+    const lables: string[] = ["goal object", "player object"];
+    if (
+      lables.includes(collision.bodyA.label) &&
+      lables.includes(collision.bodyB.label)
+    ) {
+      engine.gravity.y = 1;
+      world.bodies.forEach((body) => {
+        if (body.label === "maze wall") Body.setStatic(body, false);
+      });
+    }
+  });
 });
