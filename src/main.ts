@@ -12,8 +12,8 @@ const HEIGHT = window.innerHeight;
 const WIDTH = window.innerWidth;
 const BORDER_WALL_THICKNESS = 20;
 const MAZE_WALL_THICKNESS = 5;
-const HORIZONTAL_CELLS = 20;
-const VERTICAL_CELLS = 10;
+const HORIZONTAL_CELLS = 5;
+const VERTICAL_CELLS = 5;
 //total space for drawing cells = total width - space taken by bordewr walls on each side
 const CELL_WIDTH = (WIDTH - BORDER_WALL_THICKNESS * 2) / HORIZONTAL_CELLS;
 const CELL_HEIGHT = (HEIGHT - BORDER_WALL_THICKNESS * 2) / VERTICAL_CELLS;
@@ -310,6 +310,8 @@ Events.on(engine, "collisionStart", (event) => {
       world.bodies.forEach((body) => {
         if (body.label === "maze wall") Body.setStatic(body, false);
       });
+
+      document.querySelector(".winner")?.classList.remove("hidden");
     }
   });
 });
