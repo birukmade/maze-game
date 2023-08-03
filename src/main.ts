@@ -10,6 +10,7 @@ const CELL_WIDTH = (WIDTH - BORDER_WALL_THICKNESS * 2) / CELLS;
 const CELL_HEIGHT = (HEIGHT - BORDER_WALL_THICKNESS * 2) / CELLS;
 
 const engine = Engine.create();
+engine.gravity.y = 0;
 const { world } = engine;
 
 const render = Render.create({
