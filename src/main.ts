@@ -4,7 +4,7 @@ const HEIGHT = 600;
 const WIDTH = 600;
 const BORDER_WALL_THICKNESS = 20;
 const MAZE_WALL_THICKNESS = 5;
-const CELLS = 3;
+const CELLS = 15;
 //total space for drawing cells = total width - space taken by bordewr walls on each side
 const CELL_WIDTH = (WIDTH - BORDER_WALL_THICKNESS * 2) / CELLS;
 const CELL_HEIGHT = (HEIGHT - BORDER_WALL_THICKNESS * 2) / CELLS;
@@ -187,7 +187,28 @@ const drowVerticalLines = (verticalLines: boolean[][]): void => {
   });
 };
 
+const drawGoalObject = (
+  width: number,
+  height: number,
+  borderWallThickness: number,
+  cellWidth: number,
+  cellHeight: number
+) => {
+  const goal = Bodies.rectangle(
+    width - borderWallThickness - cellWidth / 2,
+    height - borderWallThickness - cellHeight / 2,
+    cellWidth * 0.6,
+    cellHeight * 0.6,
+    { isStatic: true }
+  );
+
+  World.add(world, goal);
+};
+
 stepThroughCell(row, col);
 //draw a wall for each vertical and horizontal walls
 drawHorizontalLines(horizontals);
 drowVerticalLines(verticals);
+
+//draw goal object
+drawGoalObject(WIDTH, HEIGHT, BORDER_WALL_THICKNESS, CELL_WIDTH, CELL_HEIGHT);
