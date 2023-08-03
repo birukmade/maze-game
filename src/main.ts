@@ -26,6 +26,7 @@ const render = Render.create({
   element: document.body,
   engine: engine,
   options: {
+    wireframes: false,
     width: WIDTH,
     height: HEIGHT,
   },
@@ -43,6 +44,9 @@ const walls: Matter.Body[] = [
     HEIGHT,
     {
       isStatic: true,
+      render: {
+        fillStyle: "grey",
+      },
     }
   ),
   Bodies.rectangle(
@@ -50,7 +54,12 @@ const walls: Matter.Body[] = [
     HEIGHT / 2,
     BORDER_WALL_THICKNESS,
     HEIGHT,
-    { isStatic: true }
+    {
+      isStatic: true,
+      render: {
+        fillStyle: "grey",
+      },
+    }
   ),
   Bodies.rectangle(
     WIDTH / 2,
@@ -59,6 +68,9 @@ const walls: Matter.Body[] = [
     BORDER_WALL_THICKNESS,
     {
       isStatic: true,
+      render: {
+        fillStyle: "grey",
+      },
     }
   ),
   Bodies.rectangle(
@@ -66,7 +78,12 @@ const walls: Matter.Body[] = [
     HEIGHT - BORDER_WALL_THICKNESS / 2,
     WIDTH,
     BORDER_WALL_THICKNESS,
-    { isStatic: true }
+    {
+      isStatic: true,
+      render: {
+        fillStyle: "grey",
+      },
+    }
   ),
 ];
 
@@ -168,6 +185,9 @@ const drawHorizontalLines = (horizontalLines: boolean[][]): void => {
           {
             label: "maze wall",
             isStatic: true,
+            render: {
+              fillStyle: "red",
+            },
           }
         );
 
@@ -189,6 +209,9 @@ const drowVerticalLines = (verticalLines: boolean[][]): void => {
           {
             label: "maze wall",
             isStatic: true,
+            render: {
+              fillStyle: "red",
+            },
           }
         );
 
@@ -210,7 +233,13 @@ const drawGoalObject = (
     height - borderWallThickness - cellHeight / 2,
     cellWidth * 0.6,
     cellHeight * 0.6,
-    { isStatic: true, label: "goal object" }
+    {
+      isStatic: true,
+      label: "goal object",
+      render: {
+        fillStyle: "green",
+      },
+    }
   );
 
   World.add(world, goal);
@@ -227,6 +256,9 @@ const drawPlayerObject = (
     cellWidth > cellHeight ? cellHeight / 4 : cellWidth / 4,
     {
       label: "player object",
+      render: {
+        fillStyle: "yellow",
+      },
     }
   );
 
