@@ -8,8 +8,8 @@ import Matter, {
   Events,
 } from "matter-js";
 
-const HEIGHT = window.innerHeight;
-const WIDTH = window.innerWidth;
+const HEIGHT = window.innerHeight - 10; // full height of the viewport minus half of the border wall thickness
+const WIDTH = window.innerWidth - 10; // full width of the viewport minus half of the border wall thickeness
 const BORDER_WALL_THICKNESS = 20;
 const MAZE_WALL_THICKNESS = 5;
 const HORIZONTAL_CELLS = 5;
