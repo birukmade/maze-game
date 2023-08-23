@@ -12,6 +12,7 @@
 
       .winner {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         position: absolute;
@@ -28,11 +29,22 @@
       .hidden {
         display: none;
       }
+
+      #play-again {
+        font-family: inherit;
+        font-size: 2rem;
+        border: none;
+        padding: 0.5rem 2rem;
+        border-radius: 0.5rem;
+        background: #00a5b1;
+        color: #ffffff;
+      }
     </style>
   </head>
   <body>
     <div class="winner hidden">
       <h1>You Won!</h1>
+      <button id="play-again">Play Again</button>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

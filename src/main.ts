@@ -312,6 +312,9 @@ Events.on(engine, "collisionStart", (event) => {
       });
 
       document.querySelector(".winner")?.classList.remove("hidden");
+      document
+        .querySelector("#play-again")
+        ?.addEventListener("click", () => window.location.reload());
     }
   });
 });
